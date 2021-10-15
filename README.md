@@ -1,0 +1,1 @@
+# lighthouse_lab_midterm_project
