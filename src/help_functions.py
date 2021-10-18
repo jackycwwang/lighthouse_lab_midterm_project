@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[3]:
-
-
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -11,13 +5,6 @@ import matplotlib.pyplot as plt
 import requests
 from sklearn.preprocessing import StandardScaler
 import config as cfg
-
-
-# In[2]:
-
-
-In[18]:
-
 
 def split_numeric_categorical(df, numeric=True):
     '''    
@@ -34,9 +21,6 @@ def split_numeric_categorical(df, numeric=True):
         return categorical_data
 
 
-# In[82]:
-
-
 def make_categorical(df, cols):
     '''
     Convert columns in `cols` to type `categorical`
@@ -46,9 +30,6 @@ def make_categorical(df, cols):
     col_dict = {col:'category' for col in cols}
     df = df.astype(col_dict)
     return df
-
-
-# In[ ]:
 
 
 def to_hhmmss(df_time_col):
@@ -75,7 +56,6 @@ def to_hhmmss(df_time_col):
     return hhmm
 
 
-# In[ ]:
 
 
 def to_city_state(city_state_col):
@@ -89,8 +69,6 @@ def to_city_state(city_state_col):
                     city_state_col.str.split(',')))
 
 
-# In[83]:
-
 
 def to_hhmmss(df_time_col):
     '''
@@ -115,8 +93,6 @@ def to_hhmmss(df_time_col):
             hhmm.append(t[:2] + ':' + t[2:] + ":00")
     return hhmm
 
-
-# In[ ]:
 
 
 def merge_df_dict(df_time_ll, dic):
@@ -131,9 +107,6 @@ def merge_df_dict(df_time_ll, dic):
     return df
 
 
-# In[29]:
-
-
 def to_dummies(df, col_array):
     '''
     change the given columns into dummy variables
@@ -142,7 +115,6 @@ def to_dummies(df, col_array):
     return pd.get_dummies(df, columns= col_array, drop_first=True)
 
 
-# In[55]:
 
 
 def to_scale(df, col_array):
@@ -154,7 +126,6 @@ def to_scale(df, col_array):
     df[col_array] = pd.DataFrame(sc.fit_transform(df[col_array]))   
 
 
-# In[56]:
 
 
 def inverse_scale(df, col_array, sc):    
