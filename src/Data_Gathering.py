@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[5]:
-
 
 import pandas as pd
 import psycopg2
@@ -70,11 +65,6 @@ class Data_Gathering:
                 weather_dict['weather'].append('NA')            
             count += 1
         return weather_dict
-
-
-# In[2]:
-
-
 
 
 
