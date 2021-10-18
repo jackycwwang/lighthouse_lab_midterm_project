@@ -69,7 +69,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "eb5eb0c0",
+   "id": "36de403c",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -100,7 +100,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "82c5b0b3",
+   "id": "09c4d68e",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -148,26 +148,8 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 85,
-   "id": "4d7c9643",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "def to_city_state(city_state_col):\n",
-    "    '''\n",
-    "    Change the format of `city1/city2, state`\n",
-    "    to `city1, state` \n",
-    "    Input: A Pandas Series\n",
-    "    Output: A Pandas Series\n",
-    "    '''\n",
-    "    return pd.Series(map(lambda x: x[0].split('/')[0] + ',' + x[-1].strip() ,\n",
-    "                    city_state_col.str.split(',')))"
-   ]
-  },
-  {
-   "cell_type": "code",
    "execution_count": null,
-   "id": "75718fe9",
+   "id": "3bebd71f",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -201,7 +183,7 @@
   {
    "cell_type": "code",
    "execution_count": 55,
-   "id": "483fbbd0",
+   "id": "5868d295",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -217,7 +199,7 @@
   {
    "cell_type": "code",
    "execution_count": 56,
-   "id": "b25ca4e9",
+   "id": "d859839b",
    "metadata": {},
    "outputs": [],
    "source": [
@@ -231,7 +213,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "a49139a0",
+   "id": "d1c5f6a5",
    "metadata": {},
    "outputs": [],
    "source": []
@@ -239,7 +221,7 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "b2134049",
+   "id": "2ecec435",
    "metadata": {},
    "outputs": [],
    "source": []
