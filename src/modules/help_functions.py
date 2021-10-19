@@ -149,7 +149,10 @@ def make_qbin_column(df, col_name, n_bin_range):
     return: a data frame with the newly binned column  
     '''
     # make bin labels
-    bin_names = list(range(1, len(n_bin_range)))
+    if type(n_bin_range) is list:
+        bin_names = list(range(1, len(n_bin_range)+1))
+    elif type(n_bin_range) is int:
+        bin_names = range(1, n_bin_range+1)
     
     # perform the binning
     new_col_name = col_name + '_bin'
@@ -234,7 +237,7 @@ def make_col_value_bins(df, col_name, new_col_bin_name, n_bin_range):
     return df
 
 
-def make_col_value_qbins(df, col_name, new_col_bin_name, n_bin_range):
+def make_col_value_qbins(df, col_name, new_col_bin_name, n_bin_range, drop=True):
     type_count = df[col_name].value_counts()
     df1 = pd.DataFrame(type_count).reset_index()
     df1 = df1.rename(columns={'index': 'bin_on', col_name: 'count'})       
@@ -242,6 +245,8 @@ def make_col_value_qbins(df, col_name, new_col_bin_name, n_bin_range):
     df = df.merge(df1, left_on=col_name, right_on='bin_on', how='left')
     df = df.rename(columns ={'count_bin': new_col_bin_name})
     df.drop(columns=['count', col_name], inplace=True)
+    if drop:
+        df.drop(columns='bin_on', inplace=True) 
     return df
 
 def get_avg_delay(df, col_list):
