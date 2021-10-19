@@ -5,10 +5,12 @@ delay_col_list= ['carrier_delay',
                  'weather_delay', 
                  'nas_delay', 
                  'security_delay', 
-                 'late_aircraft_delay', 
-                 'first_dep_time']
+                 'late_aircraft_delay' 
+                 ]
 
-
+top20_airport_code = ['LAX', 'ORD', 'EWR', 'SFO', 'LGA', 'DFW', 'LAS', 'CLT', 'DEN',
+                      'PHL', 'IAH', 'SEA', 'ATL', 'PHX', 'MCO', 'DTW', 'SLC', 'BOS',
+                      'JFK', 'MSP']
 
 
 def split_numeric_categorical(df, numeric=True):
@@ -244,8 +246,9 @@ def make_col_value_qbins(df, col_name, new_col_bin_name, n_bin_range):
 
 def get_avg_delay(df, col_list):
     df.loc[:, col_list] = df.loc[:, col_list].fillna(0)
+    df_avg_delay = pd.DataFrame(df.dest.unique(), columns=['dest'])
     for col in col_list:
-        s = df.groupby('dest')[col].mean()        
-        s.name = 'avg_' + col        
-        df = df.merge(s.to_frame(), on='dest', how='left')
-    return df
+        s = df.groupby('dest')[col].mean()
+        s.name = 'avg_' + col
+        df_avg_delay = df_avg_delay.merge(s.to_frame(), on='dest', how='left')
+    return df_avg_delay
