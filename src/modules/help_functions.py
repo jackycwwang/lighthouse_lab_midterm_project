@@ -73,29 +73,6 @@ def to_city_state(city_state_col):
                     city_state_col.str.split(',')))
 
 
-def to_hhmmss(df_time_col):
-    '''
-    Change the format of the time in hhmm
-    to hh:mm:ss, where ss is 00 in this case
-    Input: `df_time_col`: a Pandas Series
-    Return: a Pandas Series
-    '''
-    
-    hhmm = []
-    crs_hm = df_time_col.astype('str')
-    for t in crs_hm:
-        if len(t) == 1:
-            hhmm.append('0' + t + ':00:00')
-        elif (len(t) == 2) & (t < '24'):
-            hhmm.append(t + ':00:00')
-        elif (len(t) == 2) & (t > '24'):
-            hhmm.append('00:' + t + ':00')
-        elif len(t) == 3:
-            hhmm.append('0' + t[0] + ':' + t[1:] + ':00')
-        else:
-            hhmm.append(t[:2] + ':' + t[2:] + ":00")
-    return hhmm
-
 
 
 def merge_df_dict(df_time_ll, dic):
