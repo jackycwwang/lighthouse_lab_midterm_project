@@ -1,10 +1,7 @@
 import numpy as np
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import requests
-from sklearn.preprocessing import StandardScaler
-# import config as cfg
+
+
 
 def split_numeric_categorical(df, numeric=True):
     '''    
@@ -57,7 +54,6 @@ def to_hhmmss(df_time_col):
 
 
 
-
 def to_city_state(city_state_col):
     '''
     Change the format of `city1/city2, state`
@@ -67,7 +63,6 @@ def to_city_state(city_state_col):
     '''
     return pd.Series(map(lambda x: x[0].split('/')[0] + ',' + x[-1].strip() ,
                     city_state_col.str.split(',')))
-
 
 
 def to_hhmmss(df_time_col):
@@ -116,7 +111,6 @@ def to_dummies(df, col_array):
 
 
 
-
 def to_scale(df, col_array):
     '''
     scale the numeric variables to center around 0
@@ -124,7 +118,6 @@ def to_scale(df, col_array):
     '''
     sc = StandardScaler()
     df[col_array] = pd.DataFrame(sc.fit_transform(df[col_array]))   
-
 
 
 
@@ -147,14 +140,36 @@ def make_bin_column(df, col_name, n_bin_range):
     return: a data frame with the newly binned column  
     '''
     # make bins and bin labels
-    bin_ranges = np.linspace(0, df[col_name].max(), n_bin_range+1)
     bin_names = range(1, n_bin_range+1)
     
     # perform the binning
     new_col_name = col_name + '_bin'
     df[new_col_name] = pd.cut(np.array(df[col_name]), 
-                              bins=bin_ranges, 
+                              bins=n_bin_range, 
                               labels=bin_names)
+    return df
+
+def make_qbin_column(df, col_name, n_bin_range):
+    '''
+    Convert a numeric column to a ordinal column based on quantiles.
+    Assumption: the column that is going to be binned
+    must be positive numeric numbers
+    input:
+      - df: data frame
+      - col_name: column in string
+      - q_list: a list of quantiles to be binned, 
+        eg., [0, 0.25, 0.50, 0.75, 1] for 4-quantiles
+    return: a data frame with the newly binned column  
+    '''
+    # make bin labels
+    bin_names = list(range(1, len(n_bin_range)))
+    
+    # perform the binning
+    new_col_name = col_name + '_bin'
+    df[new_col_name] = pd.qcut(np.array(df[col_name]), 
+                               q=n_bin_range, 
+                               labels=bin_names, 
+                               duplicates='drop')
     return df
 
 def split_time_of_day_departure(df):
@@ -216,13 +231,32 @@ def add_weekday(df):
         https://pandas.pydata.org/docs/reference/api/pandas.DatetimeIndex.weekday.html
         week starts 0 with monday) """
 
-    df['weekday'] = df['fl_date'].astype('datetime64[ns]')
-
+#     df['weekday'] = df['fl_date']
+#     f = lambda x: x.weekday()     
+#     df['weekday'] = df['weekday'].apply(f).astype('int32')
+    df['weekday'] = pd.to_datetime(df['fl_date'])
     f = lambda x: x.weekday()     
-    df['weekday'] = df['weekday'].apply(f).astype('int32')
+    df['weekday'] = df['weekday'].apply(f)
+    df['weekday'] = df['weekday'].to_string()
     return df
 
-def make_col_value_count(df, column_name):
-    type_count = df[column_name].value_counts()
-    return pd.DataFrame(type_count)
-    
+def make_col_value_bins(df, col_name, new_col_bin_name, n_bin_range):
+    type_count = df[col_name].value_counts()
+    df1 = pd.DataFrame(type_count).reset_index()
+    df1 = df1.rename(columns={'index': col_name, col_name: 'count'})
+    df1 = make_bin_column(df1, 'count', n_bin_range)
+    df = df.merge(df1, on=col_name, how='left')
+    df = df.rename(columns ={'count_bin': new_col_bin_name})
+    df.drop(columns=['count', col_name], inplace=True)
+    return df
+
+
+def make_col_value_qbins(df, col_name, new_col_bin_name, n_bin_range):
+    type_count = df[col_name].value_counts()
+    df1 = pd.DataFrame(type_count).reset_index()
+    df1 = df1.rename(columns={'index': 'bin_on', col_name: 'count'})       
+    df1 = make_qbin_column(df1, 'count', n_bin_range)
+    df = df.merge(df1, left_on=col_name, right_on='bin_on', how='left')
+    df = df.rename(columns ={'count_bin': new_col_bin_name})
+    df.drop(columns=['count', col_name], inplace=True)
+    return df

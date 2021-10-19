@@ -231,10 +231,9 @@ def add_weekday(df):
         https://pandas.pydata.org/docs/reference/api/pandas.DatetimeIndex.weekday.html
         week starts 0 with monday) """
 
-    df['weekday'] = df['fl_date'].astype('datetime64[ns]')
-
-    f = lambda x: x.weekday()     
-    df['weekday'] = df['weekday'].apply(f).astype('int32')
+    df['weekday'] = pd.to_datetime(df['fl_date'])
+    f = lambda x: str(x.weekday())  
+    df['weekday'] = df['weekday'].apply(f)
     return df
 
 def make_col_value_bins(df, col_name, new_col_bin_name, n_bin_range):
