@@ -1,10 +1,7 @@
 import numpy as np
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import requests
 from sklearn.preprocessing import StandardScaler
-# import config as cfg
+
 
 def split_numeric_categorical(df, numeric=True):
     '''    
@@ -147,16 +144,37 @@ def make_bin_column(df, col_name, n_bin_range):
     return: a data frame with the newly binned column  
     '''
     # make bins and bin labels
-    bin_ranges = np.linspace(0, df[col_name].max(), n_bin_range+1)
     bin_names = range(1, n_bin_range+1)
     
     # perform the binning
     new_col_name = col_name + '_bin'
     df[new_col_name] = pd.cut(np.array(df[col_name]), 
-                              bins=bin_ranges, 
+                              bins=n_bin_range, 
                               labels=bin_names)
     return df
 
+def make_qbin_column(df, col_name, n_bin_range):
+    '''
+    Convert a numeric column to a ordinal column based on quantiles.
+    Assumption: the column that is going to be binned
+    must be positive numeric numbers
+    input:
+      - df: data frame
+      - col_name: column in string
+      - q_list: a list of quantiles to be binned, 
+        eg., [0, 0.25, 0.50, 0.75, 1] for 4-quantiles
+    return: a data frame with the newly binned column  
+    '''
+    # make bin labels
+    bin_names = list(range(1, len(n_bin_range)))
+    
+    # perform the binning
+    new_col_name = col_name + '_bin'
+    df[new_col_name] = pd.qcut(np.array(df[col_name]), 
+                               q=n_bin_range, 
+                               labels=bin_names, 
+                               duplicates='drop')
+    return df
 def split_time_of_day_departure(df):
     """ takes estimated time of departure and splits in to hours 24 hour clock (local time) """
     df['dep_hour'] = df['crs_dep_time']
@@ -230,4 +248,15 @@ def make_col_value_bins(df, col_name, new_col_bin_name, n_bin_range):
     df = df.merge(df1, on=col_name, how='left')
     df = df.rename(columns ={'count_bin': new_col_bin_name})
     df.drop(columns=['count', col_name], inplace=True)
-    return df   
+    return df
+
+
+def make_col_value_qbins(df, col_name, new_col_bin_name, n_bin_range):
+    type_count = df[col_name].value_counts()
+    df1 = pd.DataFrame(type_count).reset_index()
+    df1 = df1.rename(columns={'index': 'bin_on', col_name: 'count'})       
+    df1 = make_qbin_column(df1, 'count', n_bin_range)
+    df = df.merge(df1, left_on=col_name, right_on='bin_on', how='left')
+    df = df.rename(columns ={'count_bin': new_col_bin_name})
+    df.drop(columns=['count', col_name], inplace=True)
+    return df
