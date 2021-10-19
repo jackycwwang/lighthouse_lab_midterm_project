@@ -1,6 +1,14 @@
 import numpy as np
 import pandas as pd
 
+delay_col_list= ['carrier_delay', 
+                 'weather_delay', 
+                 'nas_delay', 
+                 'security_delay', 
+                 'late_aircraft_delay', 
+                 'first_dep_time']
+
+
 
 
 def split_numeric_categorical(df, numeric=True):
@@ -255,4 +263,12 @@ def make_col_value_qbins(df, col_name, new_col_bin_name, n_bin_range):
     df = df.merge(df1, left_on=col_name, right_on='bin_on', how='left')
     df = df.rename(columns ={'count_bin': new_col_bin_name})
     df.drop(columns=['count', col_name], inplace=True)
+    return df
+
+def get_avg_delay(df, col_list):
+    df.loc[:, col_list] = df.loc[:, col_list].fillna(0)
+    for col in col_list:
+        s = df.groupby('dest')[col].mean()        
+        s.name = 'avg_' + col        
+        df = df.merge(s.to_frame(), on='dest', how='left')
     return df
