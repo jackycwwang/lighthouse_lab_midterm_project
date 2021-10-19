@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+
 
 
 def split_numeric_categorical(df, numeric=True):
@@ -54,7 +54,6 @@ def to_hhmmss(df_time_col):
 
 
 
-
 def to_city_state(city_state_col):
     '''
     Change the format of `city1/city2, state`
@@ -64,7 +63,6 @@ def to_city_state(city_state_col):
     '''
     return pd.Series(map(lambda x: x[0].split('/')[0] + ',' + x[-1].strip() ,
                     city_state_col.str.split(',')))
-
 
 
 def to_hhmmss(df_time_col):
@@ -113,7 +111,6 @@ def to_dummies(df, col_array):
 
 
 
-
 def to_scale(df, col_array):
     '''
     scale the numeric variables to center around 0
@@ -121,7 +118,6 @@ def to_scale(df, col_array):
     '''
     sc = StandardScaler()
     df[col_array] = pd.DataFrame(sc.fit_transform(df[col_array]))   
-
 
 
 
@@ -175,6 +171,7 @@ def make_qbin_column(df, col_name, n_bin_range):
                                labels=bin_names, 
                                duplicates='drop')
     return df
+
 def split_time_of_day_departure(df):
     """ takes estimated time of departure and splits in to hours 24 hour clock (local time) """
     df['dep_hour'] = df['crs_dep_time']
