@@ -1,10 +1,10 @@
 
-# import pandas as pd
-# import psycopg2
-# import pandas.io.sql as sqlio
-# import requests
-# import pickle
-# import config as cfg
+import pandas as pd
+import psycopg2
+import pandas.io.sql as sqlio
+import requests
+import pickle
+import config as cfg
 
 class Data_Gathering:
     
