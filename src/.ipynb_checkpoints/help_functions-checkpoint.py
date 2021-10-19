@@ -221,3 +221,8 @@ def add_weekday(df):
     f = lambda x: x.weekday()     
     df['weekday'] = df['weekday'].apply(f).astype('int32')
     return df
+
+def make_col_value_count(df, column_name):
+    type_count = df[column_name].value_counts()
+    return pd.DataFrame(type_count)
+    

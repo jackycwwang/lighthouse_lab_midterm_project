@@ -221,3 +221,13 @@ def add_weekday(df):
     f = lambda x: x.weekday()     
     df['weekday'] = df['weekday'].apply(f).astype('int32')
     return df
+
+def make_col_value_bins(df, col_name, new_col_bin_name, n_bin_range):
+    type_count = df[col_name].value_counts()
+    df1 = pd.DataFrame(type_count).reset_index()
+    df1 = df1.rename(columns={'index': col_name, col_name: 'count'})
+    df1 = make_bin_column(df1, 'count', n_bin_range)
+    df = df.merge(df1, on=col_name, how='left')
+    df = df.rename(columns ={'count_bin': new_col_bin_name})
+    df.drop(columns=['count', col_name], inplace=True)
+    return df   
