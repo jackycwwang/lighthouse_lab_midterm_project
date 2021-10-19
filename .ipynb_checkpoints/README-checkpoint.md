@@ -1,18 +1,7 @@
 ## Project Description
-Flight delays are costly for airlines. Reimbursemnets for passengers, meal vouchers and hotels, increase 
 
-The Goal of this project is to predcit how much a flight will be delayed a week in advance.  
 
-### Data Analysis
-There are 4 main factors that impact flight delays. 
-1. Cascading delay from previous flight
-2. Airline delays (flight crew late, mechanical planes, bagage removal)
-3. Airspace dealys
-4. Lastly weather
 
-We worked to engineered our features to capture these catagories. 
-- brought in weather historic weather for major airports 
--  ...
 
 ## Data Description
 
