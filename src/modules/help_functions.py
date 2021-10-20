@@ -249,11 +249,20 @@ def make_col_value_qbins(df, col_name, new_col_bin_name, n_bin_range, drop=True)
         df.drop(columns='bin_on', inplace=True) 
     return df
 
-def get_avg_delay(df, col_list):
+def get_avg_dest_delay(df, col_list):
     df.loc[:, col_list] = df.loc[:, col_list].fillna(0)
     df_avg_delay = pd.DataFrame(df.dest.unique(), columns=['dest'])
     for col in col_list:
         s = df.groupby('dest')[col].mean()
         s.name = 'avg_' + col
         df_avg_delay = df_avg_delay.merge(s.to_frame(), on='dest', how='left')
+    return df_avg_delay
+
+def get_avg_dep_delay(df, col_list):
+    df.loc[:, col_list] = df.loc[:, col_list].fillna(0)
+    df_avg_delay = pd.DataFrame(df.dest.unique(), columns=['origin'])
+    for col in col_list:
+        s = df.groupby('origin')[col].mean()
+        s.name = 'avg_' + col
+        df_avg_delay = df_avg_delay.merge(s.to_frame(), on='origin', how='left')
     return df_avg_delay
