@@ -247,7 +247,7 @@ def split_origin_city_state(df):
     return df
 
 def encode_and_bind(original_dataframe, feature_to_encode):
-    dummies = pd.get_dummies(original_dataframe[[feature_to_encode]])
+    dummies = pd.get_dummies(original_dataframe[[feature_to_encode]], drop_first=True)
     res = pd.concat([original_dataframe, dummies], axis=1)
 #     res = res.drop([feature_to_encode], axis=1)
     return(res)
