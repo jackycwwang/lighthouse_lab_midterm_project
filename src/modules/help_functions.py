@@ -12,6 +12,42 @@ top20_airport_code = ['LAX', 'ORD', 'EWR', 'SFO', 'LGA', 'DFW', 'LAS', 'CLT', 'D
                       'PHL', 'IAH', 'SEA', 'ATL', 'PHX', 'MCO', 'DTW', 'SLC', 'BOS',
                       'JFK', 'MSP']
 
+cat_cols = ['mkt_unique_carrier', 'branded_code_share', 'mkt_carrier', 
+            'op_unique_carrier', 'origin_airport_id', 'origin', 
+            'origin_city_name', 'dest_airport_id', 'dest', 
+            'dest_city_name', 'cancelled', 'cancellation_code']
+
+
+cols_to_drop = ['origin_airport_fl_amt_bin', 
+                'dest_airport_fl_amt_bin', 
+                'dest_0', 
+                'weekday_0', 'weekday_1', 'weekday_2', 'weekday_3', 'weekday_4', 
+                'weekday_5', 'weekday_6', 
+                'origin_city_0', 
+                'origin_state_0']    
+
+states_to_drop = [
+ 'origin_state_CA',
+ 'origin_state_CO',
+ 'origin_state_FL',
+ 'origin_state_GA',
+ 'origin_state_IL',
+ 'origin_state_NC',
+ 'origin_state_NY',
+ 'origin_state_PA',
+ 'origin_state_TX',
+ 'origin_state_WA', 
+ 'dest_state_CA',
+ 'dest_state_CO',
+ 'dest_state_FL',
+ 'dest_state_GA',
+ 'dest_state_IL',
+ 'dest_state_NC',
+ 'dest_state_NY',
+ 'dest_state_PA',
+ 'dest_state_TX',
+ 'dest_state_WA',]
+
 
 def split_numeric_categorical(df, numeric=True):
     '''    
