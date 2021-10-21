@@ -1,18 +1,17 @@
 ## Project Description
-Flight delays are costly for airlines. Reimbursemnets for passengers, meal vouchers and hotels, increase 
+No one likes flight delays. Their's costly for airlines - having to reimburse passengers for meals, hotels, and in some cases, having to pay airport penalties.  Delays beget more delays.  Passengers' disatisfaction rubs off on airline staff who take the brunt of their complaints, and can impact customer retention.
 
-The Goal of this project is to predcit how much a flight will be delayed a week in advance.  
+The Goal of this project is to predict flight delays for a set of US continental flights flights, one week in advance for the first week of January 2020. 
 
 ### Data Analysis
-There are 4 main factors that impact flight delays. 
-1. Cascading delay from previous flight
+There are 4 main factors that impact flight delays. In order of impact:
+1. Cascading delay from previous flight 
 2. Airline delays (flight crew late, mechanical planes, bagage removal)
 3. Airspace dealys
 4. Lastly weather
 
-We worked to engineered our features to capture these catagories. 
-- brought in weather historic weather for major airports 
--  ...
+Using this information, and data analysis of the given test data, we initally looked at:
+
 
 ## Data Description
 
