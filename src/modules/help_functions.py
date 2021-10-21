@@ -302,3 +302,19 @@ def get_avg_dep_delay(df, col_list):
         s.name = 'avg_' + col
         df_avg_delay = df_avg_delay.merge(s.to_frame(), on='origin', how='left')
     return df_avg_delay
+
+
+def fl_arr_delay(df):
+    
+    # calculate the flight frequency
+    fl_num_freq = df.groupby('mkt_carrier_fl_num')['fl_date'].count()
+    fl_nums = fl_num_freq[fl_num_freq.values > 50]
+    df_freq = df[df.mkt_carrier_fl_num.isin(fl_nums)]
+    
+    # calculate the flight average delay
+    fl_arr_delay = df_freq.groupby('mkt_carrier_fl_num')['arr_delay'].mean()
+    fl_arr_delay.name = 'fl_arr_delay'
+    df_fl_delay = fl_arr_delay.to_frame()
+    df_fl_delay.fillna(df_fl_delay.fl_arr_delay.mean(), inplace=True)
+    
+    return df_fl_delay
