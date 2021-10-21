@@ -63,7 +63,9 @@ Since this is a regression problem, as we are predicting delays in minutes, we c
 #### Random Forests
 
 ### Limitations
-* This project has been optimized for predicting flight delays taking place on the first week of January, and have trained models on data for that time frame (first week January plus 5 days around that time, as to not include Christmas).  Using this model to predict flights during the other times of the year will likely not perform as well.  Only two years of data were used, had we included additional years, we may have been able to increase the performance.
+* This project has been optimized for predicting flight delays taking place on the first week of January, and have trained models on data for that time frame (first week January plus 5 days around that time, as to not include Christmas).  Using this model to predict flights during the other times of the year will likely not perform as well.  
+* Only two years of data were used, had we included additional years, we may have been able to increase the performance.
+* As we were only concerned with delayed flights, any flights that did not arrive were removed from the training set.  These models will not be able to predict cancelled flights.
 
 ### If we had more time, we would:
 * Use greater granularity in the grid searches for the various models as this would allow for more accurate predicting.
@@ -71,7 +73,8 @@ Since this is a regression problem, as we are predicting delays in minutes, we c
 * Add in weather historic weather data as it relates to flight delay.  We had pulled weather data for each day, but didn't pull for more frequent time segments. 
 * Investigate including popular flight routes.
 * Investigate aircraft type commonly used for those popular flight routes.
-* Investigate using more ensemble combinations. 
+* Investigate using more ensemble combinations.
+* It was interesting to see that number of passengers per airport were not directly correlated with the number of flights that airport sees in all cases.  Chicago and Newark for instance had higher passenger to flight ratio than other busyer airports and personal experience reveals a less pleasant experience in those airports.  If we had more time, we would include this information.
 
 ## Data Description
 
@@ -79,9 +82,20 @@ We can find the **all** information about specific attributes in this file.
 
 
 ### Table **flights**
+- **origin**: Origin Airport (top 20 one-hot encoded, remainder bucketed in to _0 encoded category)
+- **dest**: Destination Airport (top 20 one-hot encoded, remainder bucketed in to _0 encoded category)
+- **dep_hour**: Scheduled flight departure hour (minutes floored to hour) in local time - one-hot encoded
+- **arr_hour**: Scheduled flight arrival hour (minutes floored to hour) in local time - one-hot encoded
+- **weekday**: Numeric day of week (M=0) - on-hot encoded
+- **origin_city**: Origin City (top 10 one-hot encoded, remainder bucketed in to _0 encoded category)
+- **dest_city**: Origin City (top 10 one-hot encoded, remainder bucketed in to _0 encoded category)
+
 
 #### Variables:
+##### Variables Used in Training Data
 
+- of the ones we used?  ie _0 in all one hot encoding is the 
+##### Variables from Flights.csv
 - **fl_date**: Flight Date (yyyy-mm-dd)
 - **mkt_unique_carrier**: Unique Marketing Carrier Code. When the same code has been used by multiple carriers, a numeric suffix is used for earlier users, for example, PA, PA(1), PA(2). Use this field for analysis across a range of years.
 - **branded_code_share**: Reporting Carrier Operated or Branded Code Share Partners
