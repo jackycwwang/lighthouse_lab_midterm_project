@@ -2,3 +2,5 @@
 /src/config.py
 /src/flights_samp.csv
 /data/flights_samp.csv
+/src/__pychache__
+.ipynb_checkpoints
