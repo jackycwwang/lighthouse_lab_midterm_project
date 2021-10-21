@@ -1,6 +1,52 @@
 import numpy as np
 import pandas as pd
 
+delay_col_list= ['carrier_delay', 
+                 'weather_delay', 
+                 'nas_delay', 
+                 'security_delay', 
+                 'late_aircraft_delay' 
+                 ]
+
+top20_airport_code = ['LAX', 'ORD', 'EWR', 'SFO', 'LGA', 'DFW', 'LAS', 'CLT', 'DEN',
+                      'PHL', 'IAH', 'SEA', 'ATL', 'PHX', 'MCO', 'DTW', 'SLC', 'BOS',
+                      'JFK', 'MSP']
+
+cat_cols = ['mkt_unique_carrier', 'branded_code_share', 'mkt_carrier', 
+            'op_unique_carrier', 'origin_airport_id', 'origin', 
+            'origin_city_name', 'dest_airport_id', 'dest', 
+            'dest_city_name', 'cancelled', 'cancellation_code']
+
+
+cols_to_drop = ['origin_airport_fl_amt_bin', 
+                'dest_airport_fl_amt_bin', 
+                'dest_0', 
+                'weekday_0', 'weekday_1', 'weekday_2', 'weekday_3', 'weekday_4', 
+                'weekday_5', 'weekday_6', 
+                'origin_city_0', 
+                'origin_state_0']    
+
+states_to_drop = [
+ 'origin_state_CA',
+ 'origin_state_CO',
+ 'origin_state_FL',
+ 'origin_state_GA',
+ 'origin_state_IL',
+ 'origin_state_NC',
+ 'origin_state_NY',
+ 'origin_state_PA',
+ 'origin_state_TX',
+ 'origin_state_WA', 
+ 'dest_state_CA',
+ 'dest_state_CO',
+ 'dest_state_FL',
+ 'dest_state_GA',
+ 'dest_state_IL',
+ 'dest_state_NC',
+ 'dest_state_NY',
+ 'dest_state_PA',
+ 'dest_state_TX',
+ 'dest_state_WA',]
 
 
 def split_numeric_categorical(df, numeric=True):
@@ -64,29 +110,6 @@ def to_city_state(city_state_col):
     return pd.Series(map(lambda x: x[0].split('/')[0] + ',' + x[-1].strip() ,
                     city_state_col.str.split(',')))
 
-
-def to_hhmmss(df_time_col):
-    '''
-    Change the format of the time in hhmm
-    to hh:mm:ss, where ss is 00 in this case
-    Input: `df_time_col`: a Pandas Series
-    Return: a Pandas Series
-    '''
-    
-    hhmm = []
-    crs_hm = df_time_col.astype('str')
-    for t in crs_hm:
-        if len(t) == 1:
-            hhmm.append('0' + t + ':00:00')
-        elif (len(t) == 2) & (t < '24'):
-            hhmm.append(t + ':00:00')
-        elif (len(t) == 2) & (t > '24'):
-            hhmm.append('00:' + t + ':00')
-        elif len(t) == 3:
-            hhmm.append('0' + t[0] + ':' + t[1:] + ':00')
-        else:
-            hhmm.append(t[:2] + ':' + t[2:] + ":00")
-    return hhmm
 
 
 
@@ -162,7 +185,10 @@ def make_qbin_column(df, col_name, n_bin_range):
     return: a data frame with the newly binned column  
     '''
     # make bin labels
-    bin_names = list(range(1, len(n_bin_range)))
+    if type(n_bin_range) is list:
+        bin_names = list(range(1, len(n_bin_range)+1))
+    elif type(n_bin_range) is int:
+        bin_names = range(1, n_bin_range+1)
     
     # perform the binning
     new_col_name = col_name + '_bin'
@@ -221,7 +247,7 @@ def split_origin_city_state(df):
     return df
 
 def encode_and_bind(original_dataframe, feature_to_encode):
-    dummies = pd.get_dummies(original_dataframe[[feature_to_encode]])
+    dummies = pd.get_dummies(original_dataframe[[feature_to_encode]], drop_first=True)
     res = pd.concat([original_dataframe, dummies], axis=1)
 #     res = res.drop([feature_to_encode], axis=1)
     return(res)
@@ -231,13 +257,9 @@ def add_weekday(df):
         https://pandas.pydata.org/docs/reference/api/pandas.DatetimeIndex.weekday.html
         week starts 0 with monday) """
 
-#     df['weekday'] = df['fl_date']
-#     f = lambda x: x.weekday()     
-#     df['weekday'] = df['weekday'].apply(f).astype('int32')
     df['weekday'] = pd.to_datetime(df['fl_date'])
-    f = lambda x: x.weekday()     
+    f = lambda x: str(x.weekday())  
     df['weekday'] = df['weekday'].apply(f)
-    df['weekday'] = df['weekday'].to_string()
     return df
 
 def make_col_value_bins(df, col_name, new_col_bin_name, n_bin_range):
@@ -251,7 +273,7 @@ def make_col_value_bins(df, col_name, new_col_bin_name, n_bin_range):
     return df
 
 
-def make_col_value_qbins(df, col_name, new_col_bin_name, n_bin_range):
+def make_col_value_qbins(df, col_name, new_col_bin_name, n_bin_range, drop=True):
     type_count = df[col_name].value_counts()
     df1 = pd.DataFrame(type_count).reset_index()
     df1 = df1.rename(columns={'index': 'bin_on', col_name: 'count'})       
@@ -259,4 +281,40 @@ def make_col_value_qbins(df, col_name, new_col_bin_name, n_bin_range):
     df = df.merge(df1, left_on=col_name, right_on='bin_on', how='left')
     df = df.rename(columns ={'count_bin': new_col_bin_name})
     df.drop(columns=['count', col_name], inplace=True)
+    if drop:
+        df.drop(columns='bin_on', inplace=True) 
     return df
+
+def get_avg_dest_delay(df, col_list):
+    df.loc[:, col_list] = df.loc[:, col_list].fillna(0)
+    df_avg_delay = pd.DataFrame(df.dest.unique(), columns=['dest'])
+    for col in col_list:
+        s = df.groupby('dest')[col].mean()
+        s.name = 'avg_' + col
+        df_avg_delay = df_avg_delay.merge(s.to_frame(), on='dest', how='left')
+    return df_avg_delay
+
+def get_avg_dep_delay(df, col_list):
+    df.loc[:, col_list] = df.loc[:, col_list].fillna(0)
+    df_avg_delay = pd.DataFrame(df.dest.unique(), columns=['origin'])
+    for col in col_list:
+        s = df.groupby('origin')[col].mean()
+        s.name = 'avg_' + col
+        df_avg_delay = df_avg_delay.merge(s.to_frame(), on='origin', how='left')
+    return df_avg_delay
+
+
+def fl_arr_delay(df):
+    
+    # calculate the flight frequency
+    fl_num_freq = df.groupby('mkt_carrier_fl_num')['fl_date'].count()
+    fl_nums = fl_num_freq[fl_num_freq.values > 30]
+    df_freq = df[df.mkt_carrier_fl_num.isin(fl_nums)]
+    
+    # calculate the flight average delay
+    fl_arr_delay = df_freq.groupby('mkt_carrier_fl_num')['arr_delay'].median()
+    fl_arr_delay.name = 'fl_num_delay'
+    df_fl_delay = fl_arr_delay.to_frame().reset_index()
+    df_fl_delay.fillna(df_fl_delay.fl_num_delay.median(), inplace=True)
+    
+    return df_fl_delay
