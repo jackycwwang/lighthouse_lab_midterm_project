@@ -1,17 +1,77 @@
 ## Project Description
-No one likes flight delays. Their's costly for airlines - having to reimburse passengers for meals, hotels, and in some cases, having to pay airport penalties.  Delays beget more delays.  Passengers' disatisfaction rubs off on airline staff who take the brunt of their complaints, and can impact customer retention.
+No one enjoys flight delays. They're costly for airlines -  having to reimburse passengers for meals, hotels, and in some cases, having to pay airport penalties.  Delays beget more delays.  Passengers' disatisfaction rub off on airline staff who take the brunt of their complaints, and can also impact customer retention.
 
-The Goal of this project is to predict flight delays for a set of US continental flights flights, one week in advance for the first week of January 2020. 
+The goal of this project is to predict flight delays US domestic flights, one week in advance during the first week of January 2020. 
 
 ### Data Analysis
 There are 4 main factors that impact flight delays. In order of impact:
-1. Cascading delay from previous flight 
+1. Cascading delays from previous flight(s) 
 2. Airline delays (flight crew late, mechanical planes, bagage removal)
-3. Airspace dealys
-4. Lastly weather
+3. Airspace delays
+4. Weather
 
-Using this information, and data analysis of the given test data, we initally looked at:
+Using this information, as well as using analysis of the given test data set, we selected features to include.
 
+##### Delays from previous flights
+* More delays happen in the afternoon than morning as more flight legs have been accumulated as the day goes on, so we have included the hour of the day for scheduled flight departure and scheduled flight arrival.
+* Included historic averages of delays of late aircraft per airport
+* Distance and scheduled time, if longer, could potentially indicate less prior flights, and also, longer flights have more chance to make up time in the air.
+
+##### Airline delays
+* These can be baggage delays, having aircrew time out, and other factors so we've included the 9 major airlines, and flight numbers in the model
+
+##### Airspace delays 
+* We looked at the busyness (number of flights) of the airports, city and state and included the top ones
+* Included historic NAS delay per airport
+
+##### Weather 
+* Instead of bringing the actual historic weather data into our model, we chose to select sample dataset that would closely represent the seasonal impact on flights from when we would test - being end of December, early January.
+* We also included the average weather delay metric per airport
+
+### Feature Engineering and Feature Reduction
+We used a linear regression model for our feature selection process. We started by striping our test data to line up with the formatting of the data we will recieve to test. From there we formatted the columns by initally binning some continous features like flight times and label encoding some features like airport by busyness, but then after talking mentors we one-hot encoded all categorical variables.  Numerical features were scaled with a standard scaler that seemed to perform slightly better than the max/min scaler.  
+We added feature by feature and tested the linear regression with r2 and MAE metrics.  The linear regression peaked out at about 0.08 but the MAE was lowest when the r2 was lower when we shrunk all early flights (negative delays) to zero - as we only are concerned with delays. 
+
+RFE was done for 50 features, and only told us that we need more features than 50
+PCA and LDA were also performed
+* For LDA the target was transformed catigorical by bining the arrival delay
+* The best number of features were 134 for the set we had
+
+Features not included
+* Flight numbers - as there were too many to one-hot encode 
+* Airport id 
+
+Departure Delay - as Included avg departure delay
+* Distance - we found didn't impact the arrival delays
+* Days of week - we thought that weekends would have a different delay pattern, or fridays, but does not
+* Flight numbers - we chose not to include this for sake of time 
+* included the log of scheduled elasped time as the distribution was skewed and aircraft can sometimes make up for lost time in the air.  We binned this value and one-hot encoded it
+
+** mention skewed ness of data logging
+We binned a number of features to simplify the model 
+we originally label encoded a number of features in order of magnitude ie busyness of airport, but then found out linear regression handles one-hot encoding better, so we converted most bi**
+
+### Baseline Modelling
+
+### Machine Learning algorithms
+Since this is a regression problem, as we are predicting delays in minutes, we chose three additional more complex models to use after using Linear regression to baseline the model. 
+
+#### SVM
+
+#### XGBoost
+
+#### Random Forests
+
+### Limitations
+* This project has been optimized for predicting flight delays taking place on the first week of January, and have trained models on data for that time frame (first week January plus 5 days around that time, as to not include Christmas).  Using this model to predict flights during the other times of the year will likely not perform as well.  Only two years of data were used, had we included additional years, we may have been able to increase the performance.
+
+### If we had more time, we would:
+* Use greater granularity in the grid searches for the various models as this would allow for more accurate predicting.
+* Add a feature to indicate if the airport origin for the flight is a hub for the particular airline for that flight.  This could indicate more resources to fix delays by more easily swapping aircraft is a precious one is late, or have the resources to repair minor mechanical issues in a more timely fashion.  
+* Add in weather historic weather data as it relates to flight delay.  We had pulled weather data for each day, but didn't pull for more frequent time segments. 
+* Investigate including popular flight routes.
+* Investigate aircraft type commonly used for those popular flight routes.
+* Investigate using more ensemble combinations. 
 
 ## Data Description
 
