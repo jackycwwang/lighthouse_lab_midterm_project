@@ -59,10 +59,10 @@ Since we are predicting arrival delays in minutes, a continuous variable, this i
 * Still waiting for results.
 
 #### XGBoost
-* The best performing model of the four chosen: r2: 0.013, MSE: 256.00, MAE: 12.37
+* The best performing model of the four chosen: r2: 0.138, MSE: 256.00, MAE: 12.37
 
 #### Random Forests
-* Initially performed worse than the linear regression model, but after tunning through grid search and cross validation was able to get MAE: 12.65 and r2 0.10
+* Initially performed worse than the linear regression model, but after tunning through grid search and cross validation was able to get MAE: 12.65 and r2: 0.10
 
 #### Others
 ##### Ada Boost 
@@ -81,9 +81,10 @@ r2: -0.0142, MSE: 336.25, MAE: 14.11
 * Use greater granularity in the grid searches for the various models as this would allow for more accurate predicting.
 * Add a feature to indicate if the airport origin for the flight is a hub for the particular airline for that flight.  This could indicate more resources to fix delays by more easily swapping aircraft if a previous one is late, or have the resources to repair minor mechanical issues in a more timely fashion.  
 * Add in weather historic weather data as it relates to flight delay.  We had pulled weather data for each day, but did not have a chance to pull for more frequent time segments. 
-* Investigate aircraft types commonly used for popular flight routes (are some are more affected by weather than others?.)
+* Investigate aircraft types commonly used for popular flight routes (some are more affected by weather than others?).
 * Investigate using more ensemble combinations.
 * It was interesting to see that the number of passengers per airport were not directly correlated with the number of flights that airport sees in all cases.  Chicago and Newark for instance had higher passenger to flight ratio than other relatively busier airports and personal experience revealed a less pleasant experience in those airports.  If we had more time, we would include this information.
+
 
 ## PROJECT FILES AND FOLDERS
 ### Files
