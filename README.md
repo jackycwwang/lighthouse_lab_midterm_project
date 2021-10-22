@@ -33,7 +33,7 @@ Other Features included
 ### Feature Engineering and Feature Reduction
 
 We used the linear regression model performance as an assessment metric for our feature selection process. We started by striping our training data to line up with the formatting of the data we received to test. From there we formatted the columns by initially binning some continuous features, to simplify the noise, like flight times and label encoding some features like airport, city and state by busyness, but then after talking with some mentors, we one-hot encoded all categorical variables, and binned, and encoded some continuous ones.  The remaining numerical features were scaled with a standard scaler that seemed to perform slightly better than the max/min scaler.  If the feature was skewed, and positive, we took the log to more centrally represent the feature. 
- 
+
 We added feature by feature to the train set, and tested the linear regression with r-squared (r2), mean absolute error (MAE) and mean squared error(MSE) metrics.  The linear regression peaked out at about 0.08 for r2, but the MAE was lowest - around 3, when we sent all early flights (negative delays) to zero - as we only are concerned with delays.  Unfortunately the r2 also decreased, so we did not use this feature.  
 
 The maximum number of features we had was 171. To reduce features, we did:
@@ -59,10 +59,10 @@ Since we are predicting arrival delays in minutes, a continuous variable, this i
 * Still waiting for results.
 
 #### XGBoost
-* The best performing model of the four chosen: r2: 0.013, MSE: 256.00, MAE: 12.37
+* The best performing model of the four chosen: r2: 0.138, MSE: 256.00, MAE: 12.37
 
 #### Random Forests
-* Initially performed worse than the linear regression model, but after tunning through grid search and cross validation was able to get MAE: 12.65 and r2 0.10
+* Initially performed worse than the linear regression model, but after tunning through grid search and cross validation was able to get MAE: 12.65 and r2: 0.10
 
 #### Others
 ##### Ada Boost 
@@ -81,30 +81,30 @@ r2: -0.0142, MSE: 336.25, MAE: 14.11
 * Use greater granularity in the grid searches for the various models as this would allow for more accurate predicting.
 * Add a feature to indicate if the airport origin for the flight is a hub for the particular airline for that flight.  This could indicate more resources to fix delays by more easily swapping aircraft if a previous one is late, or have the resources to repair minor mechanical issues in a more timely fashion.  
 * Add in weather historic weather data as it relates to flight delay.  We had pulled weather data for each day, but did not have a chance to pull for more frequent time segments. 
-* Investigate aircraft types commonly used for popular flight routes (are some are more affected by weather than others?.)
+* Investigate aircraft types commonly used for popular flight routes (some are more affected by weather than others?).
 * Investigate using more ensemble combinations.
 * It was interesting to see that the number of passengers per airport were not directly correlated with the number of flights that airport sees in all cases.  Chicago and Newark for instance had higher passenger to flight ratio than other relatively busier airports and personal experience revealed a less pleasant experience in those airports.  If we had more time, we would include this information.
 
+
 ## PROJECT FILES AND FOLDERS
 ### Files
-* 1.1-univariate_and_bivariate_analysis.ipynb - a closer look at individual features and their relationships
-* 1.2-exploratory_analysis.ipynb - following a guided 10 question process to take a closer look at the data and some additional hypotheses
-* 2.1-feature-engineering.ipynb - data encoding and preparation of features
-* 2.2-model-filtering.ipynb - exploring various regression models to use
-* 3.1-modelling-linear_regression.ipynb - simple baseline model to benchmark performance
-* 3.2-modelling-random-forest.ipynb - grid search runs for random forest
-* 3.3-modelling-svm.ipynb - attemptted support vector machine
-* 3.4-modelling-xgboost.ipynb - xgboost optimization
-* 4.0-predict_flight_tests.ipynb - preparation of test data for prediction, and the final prediction using xgboost model
+* `1.1-univariate_and_bivariate_analysis.ipynb` - a closer look at individual features and their relationships
+* `1.2-exploratory_analysis.ipynb` - following a guided 10 question process to take a closer look at the data and some additional hypotheses
+* `2.1-feature-engineering.ipynb` - data encoding and preparation of features
+* `2.2-model-filtering.ipynb` - exploring various regression models to use
+* `3.1-modelling-linear_regression.ipynb` - simple baseline model to benchmark performance
+* `3.2-modelling-random-forest.ipynb` - grid search runs for random forest
+* `3.3-modelling-svm.ipynb` - attemptted support vector machine
+* `3.4-modelling-xgboost.ipynb` - xgboost optimization
+* `4.0-predict_flight_tests.ipynb` - preparation of test data for prediction, and the final prediction using xgboost model
 
-* submission.csv - contains test flights and predicted delays
+* `submission.csv` - contains test flights and predicted delays
 
 ### Folders
 * /model/ - Contains only the best models (.pkl). Note, not all models are contained here as the random forest pickle file was over 2gb in size
 * /output/ - Contains the submission.csv file with the predicted flight delays using our xgboost model
 * /src/ - Contains the ipython notebooks with data analysis, models and predictions
 * /src/modules/ Contains custom helper functions 
-
 
 
 ## Data Description
@@ -134,8 +134,8 @@ We can find the **all** information about specific attributes in this file.
 ### Table **flights**
 ##### This is the available feature space for this project
 
-- of the ones we used?  ie _0 in all one hot encoding is the 
-##### Variables from Flights.csv
+
+##### Variables from `Flights.csv`
 - **fl_date**: Flight Date (yyyy-mm-dd)
 - **mkt_unique_carrier**: Unique Marketing Carrier Code. When the same code has been used by multiple carriers, a numeric suffix is used for earlier users, for example, PA, PA(1), PA(2). Use this field for analysis across a range of years.
 - **branded_code_share**: Reporting Carrier Operated or Branded Code Share Partners
