@@ -59,10 +59,18 @@ Since we are predicting arrival delays in minutes, a continuous variable, this i
 * Still waiting for results.
 
 #### XGBoost
-* The best performing model of the four chosen
+* The best performing model of the four chosen: r2: 0.013, MSE: 256.00, MAE: 12.37
 
 #### Random Forests
 * Initially performed worse than the linear regression model, but after tunning through grid search and cross validation was able to get MAE: 12.65 and r2 0.10
+
+#### Others
+##### Ada Boost 
+r2: -0.016, MSE: 299.2, MAE: 14.059
+##### Gradient Boosting
+r2: 0.075, MSE: 272.46, MAE: 12.85
+##### Bagging 
+r2: -0.0142, MSE: 336.25, MAE: 14.11
 
 ### Limitations
 * This project has been optimized for prediction of flight delays taking place in the first week of January, and has trained models on data for that time frame (first week January plus 5 days around that time, as to not include Christmas).  Using this model to predict flights during the other times of the year will likely not perform as well.  
@@ -78,24 +86,24 @@ Since we are predicting arrival delays in minutes, a continuous variable, this i
 * It was interesting to see that the number of passengers per airport were not directly correlated with the number of flights that airport sees in all cases.  Chicago and Newark for instance had higher passenger to flight ratio than other relatively busier airports and personal experience revealed a less pleasant experience in those airports.  If we had more time, we would include this information.
 
 ## PROJECT FILES AND FOLDERS
-###Files
-1.1-univariate_and_bivariate_analysis.ipynb - a closer look at individual features and their relationships
-1.2-exploratory_analysis.ipynb - following a guided 10 question process to take a closer look at the data and some additional hypotheses
-2.1-feature-engineering.ipynb - data encoding and preparation of features
-2.2-model-filtering.ipynb - exploring various regression models to use
-3.1-modelling-linear_regression.ipynb - simple baseline model to benchmark performance
-3.2-modelling-random-forest.ipynb - grid search runs for random forest
-3.3-modelling-svm.ipynb - attemptted support vector machine
-3.4-modelling-xgboost.ipynb - xgboost optimization
-4.0-predict_flight_tests.ipynb - preparation of test data for prediction, and the final prediction using xgboost model
+### Files
+* 1.1-univariate_and_bivariate_analysis.ipynb - a closer look at individual features and their relationships
+* 1.2-exploratory_analysis.ipynb - following a guided 10 question process to take a closer look at the data and some additional hypotheses
+* 2.1-feature-engineering.ipynb - data encoding and preparation of features
+* 2.2-model-filtering.ipynb - exploring various regression models to use
+* 3.1-modelling-linear_regression.ipynb - simple baseline model to benchmark performance
+* 3.2-modelling-random-forest.ipynb - grid search runs for random forest
+* 3.3-modelling-svm.ipynb - attemptted support vector machine
+* 3.4-modelling-xgboost.ipynb - xgboost optimization
+* 4.0-predict_flight_tests.ipynb - preparation of test data for prediction, and the final prediction using xgboost model
 
-submission.csv - contains test flights and predicted delays
+* submission.csv - contains test flights and predicted delays
 
-###Folders
-/model/ - Contains only the best models (.pkl). Note, not all models are contained here as the random forest pickle file was over 2gb in size
-/output/ - Contains the submission.csv file with the predicted flight delays using our xgboost model
-/src/ - Contains the ipython notebooks with data analysis, models and predictions
-/src/modules/ Contains custom helper functions 
+### Folders
+* /model/ - Contains only the best models (.pkl). Note, not all models are contained here as the random forest pickle file was over 2gb in size
+* /output/ - Contains the submission.csv file with the predicted flight delays using our xgboost model
+* /src/ - Contains the ipython notebooks with data analysis, models and predictions
+* /src/modules/ Contains custom helper functions 
 
 
 
