@@ -8,3 +8,16 @@
 **__pycache__
 .DS_Store?
 .DS_Store
+
+/data
+/src/config.py
+/src/flights_samp.csv
+/data/flights_samp.csv
+/config.py
+/src/pychache
+.ipynb_checkpoints
+/.ipynb_checkpoints/
+.pycache
+**pycache
+.DS_Store?
+.DS_Store
