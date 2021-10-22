@@ -33,7 +33,7 @@ Other Features included
 ### Feature Engineering and Feature Reduction
 
 We used the linear regression model performance as an assessment metric for our feature selection process. We started by striping our training data to line up with the formatting of the data we received to test. From there we formatted the columns by initially binning some continuous features, to simplify the noise, like flight times and label encoding some features like airport, city and state by busyness, but then after talking with some mentors, we one-hot encoded all categorical variables, and binned, and encoded some continuous ones.  The remaining numerical features were scaled with a standard scaler that seemed to perform slightly better than the max/min scaler.  If the feature was skewed, and positive, we took the log to more centrally represent the feature. 
- 
+
 We added feature by feature to the train set, and tested the linear regression with r-squared (r2), mean absolute error (MAE) and mean squared error(MSE) metrics.  The linear regression peaked out at about 0.08 for r2, but the MAE was lowest - around 3, when we sent all early flights (negative delays) to zero - as we only are concerned with delays.  Unfortunately the r2 also decreased, so we did not use this feature.  
 
 The maximum number of features we had was 171. To reduce features, we did:
@@ -107,7 +107,6 @@ r2: -0.0142, MSE: 336.25, MAE: 14.11
 * /src/modules/ Contains custom helper functions 
 
 
-
 ## Data Description
  
 ##### This is the engineered feature space for training the model
@@ -136,7 +135,7 @@ We can find the **all** information about specific attributes in this file.
 ##### This is the available feature space for this project
 
 
-##### Variables from Flights.csv
+##### Variables from `Flights.csv`
 - **fl_date**: Flight Date (yyyy-mm-dd)
 - **mkt_unique_carrier**: Unique Marketing Carrier Code. When the same code has been used by multiple carriers, a numeric suffix is used for earlier users, for example, PA, PA(1), PA(2). Use this field for analysis across a range of years.
 - **branded_code_share**: Reporting Carrier Operated or Branded Code Share Partners
