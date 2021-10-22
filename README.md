@@ -88,17 +88,17 @@ r2: -0.0142, MSE: 336.25, MAE: 14.11
 
 ## PROJECT FILES AND FOLDERS
 ### Files
-* 1.1-univariate_and_bivariate_analysis.ipynb - a closer look at individual features and their relationships
-* 1.2-exploratory_analysis.ipynb - following a guided 10 question process to take a closer look at the data and some additional hypotheses
-* 2.1-feature-engineering.ipynb - data encoding and preparation of features
-* 2.2-model-filtering.ipynb - exploring various regression models to use
-* 3.1-modelling-linear_regression.ipynb - simple baseline model to benchmark performance
-* 3.2-modelling-random-forest.ipynb - grid search runs for random forest
-* 3.3-modelling-svm.ipynb - attemptted support vector machine
-* 3.4-modelling-xgboost.ipynb - xgboost optimization
-* 4.0-predict_flight_tests.ipynb - preparation of test data for prediction, and the final prediction using xgboost model
+* `1.1-univariate_and_bivariate_analysis.ipynb` - a closer look at individual features and their relationships
+* `1.2-exploratory_analysis.ipynb` - following a guided 10 question process to take a closer look at the data and some additional hypotheses
+* `2.1-feature-engineering.ipynb` - data encoding and preparation of features
+* `2.2-model-filtering.ipynb` - exploring various regression models to use
+* `3.1-modelling-linear_regression.ipynb` - simple baseline model to benchmark performance
+* `3.2-modelling-random-forest.ipynb` - grid search runs for random forest
+* `3.3-modelling-svm.ipynb` - attemptted support vector machine
+* `3.4-modelling-xgboost.ipynb` - xgboost optimization
+* `4.0-predict_flight_tests.ipynb` - preparation of test data for prediction, and the final prediction using xgboost model
 
-* submission.csv - contains test flights and predicted delays
+* `submission.csv` - contains test flights and predicted delays
 
 ### Folders
 * /model/ - Contains only the best models (.pkl). Note, not all models are contained here as the random forest pickle file was over 2gb in size
