@@ -31,16 +31,16 @@ Using this information, as well as using analysis of the given test data sets, w
 
 Other Features included
 * Top 20 airports in terms of number of flights they see
-* Top 10 cities and states in terms of number of flights the see 
+* Top 10 cities and states in terms of number of flights they see 
 * Median delays for flight numbers (routes) that occurred greater than 30 times in our sample data set.
 
 ### Feature Engineering and Feature Reduction
 
-We used a the linear regression model performance as an assessment metric for our feature selection process. We started by striping our training data to line up with the formatting of the data we received to test. From there we formatted the columns by initially binning some continuous features, to simplify the noise, like flight times and label encoding some features like airport, city and state by busyness, but then after talking with some mentors, we one-hot encoded all categorical variables, and binned, and encoded some continuous ones.  The remaining numerical features were scaled with a standard scaler that seemed to perform slightly better than the max/min scaler.  If the feature was skewed, and positive, we took the log to more centrally model the feature. 
+We used the linear regression model performance as an assessment metric for our feature selection process. We started by striping our training data to line up with the formatting of the data we received to test. From there we formatted the columns by initially binning some continuous features, to simplify the noise, like flight times and label encoding some features like airport, city and state by busyness, but then after talking with some mentors, we one-hot encoded all categorical variables, and binned, and encoded some continuous ones.  The remaining numerical features were scaled with a standard scaler that seemed to perform slightly better than the max/min scaler.  If the feature was skewed, and positive, we took the log to more centrally model the feature. 
  
 We added feature by feature to the train set, and tested the linear regression with r-squared (r2), mean absolute error (MAE) and mean squared error(MSE) metrics.  The linear regression peaked out at about 0.08 for r2, but the MAE was lowest - around 3, when we sent all early flights (negative delays) to zero - as we only are concerned with delays.  Unfortunately the r2 also decreased, so we did not use this feature.  
 
-The maximum number of features we had was 171 to reduce features, we did:
+The maximum number of features we had was 171. To reduce features, we did:
 
 * **Forward filtering** when adding new features
 * **RFE** was done to select 50 features, and this only told us that we need more features than 50, but was too time consuming to repeat for our project time frame.
@@ -49,7 +49,7 @@ The maximum number of features we had was 171 to reduce features, we did:
 This whole process was iterative. If we found our models weren’t performing well, after tuning hyperperameters, we would try new features to add like days of the week, average delay metrics for locations and flight routes. Then see if it improved the linear regression model, and then re-tuned the hyperperameters with grid search and cross validation for the more complex models.
 
 
-### BModelling
+### Modelling
 
 ### Machine Learning algorithms
 Since we are predicting arrival delays in minutes, a continuous variable, this is a regression problem, we chose three additional more complex regression models to train after using Linear regression to baseline the model in order to better represent the complexities and improve the performance.
@@ -81,11 +81,8 @@ Since we are predicting arrival delays in minutes, a continuous variable, this i
 * It was interesting to see that the number of passengers per airport were not directly correlated with the number of flights that airport sees in all cases.  Chicago and Newark for instance had higher passenger to flight ratio than other relatively busier airports and personal experience revealed a less pleasant experience in those airports.  If we had more time, we would include this information.
 
 ## Data Description
-
-We can find the **all** information about specific attributes in this file.
-
-
-### Table **flights**
+ 
+##### This is the engineered feature space for training the model
 - **origin**: Origin Airport (top 20 one-hot encoded, remainder bucketed in to _0 encoded category)
 - **dest**: Destination Airport (top 20 one-hot encoded, remainder bucketed in to _0 encoded category)
 - **dep_hour**: Scheduled flight departure hour (minutes floored to hour) in local time - one-hot encoded
@@ -93,10 +90,22 @@ We can find the **all** information about specific attributes in this file.
 - **weekday**: Numeric day of week (M=0) - on-hot encoded
 - **origin_city**: Origin City (top 10 one-hot encoded, remainder bucketed in to _0 encoded category)
 - **dest_city**: Origin City (top 10 one-hot encoded, remainder bucketed in to _0 encoded category)
-
+- **fl_num_delay**: Average arrival delay to each route (consider only the flight frequency higher than 30, remainder replaced with median arr_delay)
+- **log_crs_elapsed_time**: Average log scheduled elapsed time binned to 20 categories and one-hot-encoded
+- **mkt_unique_carrier**: One-hot-encoded the carrier codes
+- **avg_carrier_delay**: Average Carrier Delay, in Minutes
+- **avg_weather_delay**: Average Weather Delay, in Minutes
+- **avg_nas_delay**: Aveerage National Air System Delay, in Minutes
+- **avg_security_delay**: Average Security Delay, in Minutes
+- **avg_late_aircraft_delay**: Average Late Aircraft Delay, in Minutes
+- **avg_dep_delay**: Average departure delay to airports, in Minutes
+- **origin_airport_fl_amt**: Frequency of origin flights per airport bucketed into 7 bins
+- **dest_airport_fl_amt**: Frequency of dest flights per airport bucketed into 7 bins
 
 #### Variables:
-##### Variables Used in Training Data
+We can find the **all** information about specific attributes in this file.
+### Table **flights**
+##### This is the available feature space for this project
 
 - of the ones we used?  ie _0 in all one hot encoding is the 
 ##### Variables from Flights.csv
@@ -141,3 +150,5 @@ We can find the **all** information about specific attributes in this file.
 - **first_dep_time**: First Gate Departure Time at Origin Airport
 - **total_add_gtime**: Total Ground Time Away from Gate for Gate Return or Cancelled Flight
 - **longest_add_gtime**: Longest Time Away from Gate for Gate Return or Cancelled Flight
+
+
