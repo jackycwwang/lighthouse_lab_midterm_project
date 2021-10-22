@@ -1,80 +1,84 @@
 ## Project Description
-No one enjoys flight delays. They're costly for airlines -  having to reimburse passengers for meals, hotels, and in some cases, having to pay airport penalties.  Delays beget more delays.  Passengers' disatisfaction rub off on airline staff who take the brunt of their complaints, and can also impact customer retention.
+No one enjoys flight delays. They're costly for airlines, and negative for passengers who need to get to their destination on time, without missing any connecting flights.  If we had the ability to predict delays, airlines could put plans in place to potentially save money - by no longer needing to reimburse passengers for meals and lodging, and prevent having to pay hefty airport penalties for not leaving the gate on time.  As delays beget more delays, planning to mitigate potential ones could save from having a cascading delay effect.  Airline staff could have greater job satisfaction without having to take the brunt of irate passenger complaints, having a two-fold effect on customer retention.
 
-The goal of this project is to predict flight delays US domestic flights, one week in advance during the first week of January 2020. 
+The goal of this project is to predict US domestic flight delays, for the first week of January 2020, from one week in advance.
 
 ### Data Analysis
-There are 4 main factors that impact flight delays. In order of impact:
-1. Cascading delays from previous flight(s) 
+Through our research, we found that there are 4 main factors that contribute to flight delays. In order of impact:
+1. Late aircraft delay from previous flights
 2. Airline delays (flight crew late, mechanical planes, bagage removal)
 3. Airspace delays
 4. Weather
 
-Using this information, as well as using analysis of the given test data set, we selected features to include.
+Using this information, as well as using analysis of the given test data sets, we selected features to include.
 
 ##### Delays from previous flights
 * More delays happen in the afternoon than morning as more flight legs have been accumulated as the day goes on, so we have included the hour of the day for scheduled flight departure and scheduled flight arrival.
 * Included historic averages of delays of late aircraft per airport
-* Distance and scheduled time, if longer, could potentially indicate less prior flights, and also, longer flights have more chance to make up time in the air.
+* Distance and log of scheduled elapsed time as the distribution was skewed - longer flights could potentially indicate less prior flights, and also, longer flights have more chance to make up time in the air.
 
 ##### Airline delays
-* These can be baggage delays, having aircrew time out, and other factors so we've included the 9 major airlines, and flight numbers in the model
+* These can be baggage delays, having aircrew time out, and other factors so we've included the 9 major airlines.
+* Included the median delays for flight numbers (routes) for any route that had more than 30 records in the dataset/
 
 ##### Airspace delays 
 * We looked at the busyness (number of flights) of the airports, city and state and included the top ones
 * Included historic NAS delay per airport
 
 ##### Weather 
-* Instead of bringing the actual historic weather data into our model, we chose to select sample dataset that would closely represent the seasonal impact on flights from when we would test - being end of December, early January.
-* We also included the average weather delay metric per airport
+* Instead of bringing the actual historic weather data into our model, we chose to select a sample dataset that would closely represent the seasonal impact on flights from when we would test - being the first week of January and five days on either side.
+* We also included the average weather delay metric per airport.
+
+Other Features included
+* Top 20 airports in terms of number of flights they see
+* Top 10 cities and states in terms of number of flights the see 
+* Median delays for flight numbers (routes) that occurred greater than 30 times in our sample data set.
 
 ### Feature Engineering and Feature Reduction
-We used a linear regression model for our feature selection process. We started by striping our test data to line up with the formatting of the data we will recieve to test. From there we formatted the columns by initally binning some continous features like flight times and label encoding some features like airport by busyness, but then after talking mentors we one-hot encoded all categorical variables.  Numerical features were scaled with a standard scaler that seemed to perform slightly better than the max/min scaler.  
-We added feature by feature and tested the linear regression with r2 and MAE metrics.  The linear regression peaked out at about 0.08 but the MAE was lowest when the r2 was lower when we shrunk all early flights (negative delays) to zero - as we only are concerned with delays. 
 
-RFE was done for 50 features, and only told us that we need more features than 50
-PCA and LDA were also performed
-* For LDA the target was transformed catigorical by bining the arrival delay
-* The best number of features were 134 for the set we had
+We used a the linear regression model performance as an assessment metric for our feature selection process. We started by striping our training data to line up with the formatting of the data we received to test. From there we formatted the columns by initially binning some continuous features, to simplify the noise, like flight times and label encoding some features like airport, city and state by busyness, but then after talking with some mentors, we one-hot encoded all categorical variables, and binned, and encoded some continuous ones.  The remaining numerical features were scaled with a standard scaler that seemed to perform slightly better than the max/min scaler.  If the feature was skewed, and positive, we took the log to more centrally model the feature. 
+ 
+We added feature by feature to the train set, and tested the linear regression with r-squared (r2), mean absolute error (MAE) and mean squared error(MSE) metrics.  The linear regression peaked out at about 0.08 for r2, but the MAE was lowest - around 3, when we sent all early flights (negative delays) to zero - as we only are concerned with delays.  Unfortunately the r2 also decreased, so we did not use this feature.  
 
-Features not included
-* Flight numbers - as there were too many to one-hot encode 
-* Airport id 
+The maximum number of features we had was 171 to reduce features, we did:
 
-Departure Delay - as Included avg departure delay
-* Distance - we found didn't impact the arrival delays
-* Days of week - we thought that weekends would have a different delay pattern, or fridays, but does not
-* Flight numbers - we chose not to include this for sake of time 
-* included the log of scheduled elasped time as the distribution was skewed and aircraft can sometimes make up for lost time in the air.  We binned this value and one-hot encoded it
+* **Forward filtering** when adding new features
+* **RFE** was done to select 50 features, and this only told us that we need more features than 50, but was too time consuming to repeat for our project time frame.
+* **Linear Discriminant Analysis** was done by creating a categorical target variable from a continuous one by binning the arrival delay time. Two components that explained the most variance were compared and features like the bins for the non-high-traffic airports, city and state were removed.  
 
-** mention skewed ness of data logging
-We binned a number of features to simplify the model 
-we originally label encoded a number of features in order of magnitude ie busyness of airport, but then found out linear regression handles one-hot encoding better, so we converted most bi**
+This whole process was iterative. If we found our models weren’t performing well, after tuning hyperperameters, we would try new features to add like days of the week, average delay metrics for locations and flight routes. Then see if it improved the linear regression model, and then re-tuned the hyperperameters with grid search and cross validation for the more complex models.
 
-### Baseline Modelling
+
+### BModelling
 
 ### Machine Learning algorithms
-Since this is a regression problem, as we are predicting delays in minutes, we chose three additional more complex models to use after using Linear regression to baseline the model. 
+Since we are predicting arrival delays in minutes, a continuous variable, this is a regression problem, we chose three additional more complex regression models to train after using Linear regression to baseline the model in order to better represent the complexities and improve the performance.
+
+#### Linear Regression 
+* Best performance was found with the last modifications to the training data: r2: 0.078, MSE: 271.24, MAE: 12.83
 
 #### SVM
+* This was a beast of a model and took several tries running it on google colab to have it not time out while a grid search to tune hyperparameters.
+* Still waiting for results.
 
 #### XGBoost
+* The best performing model of the four chosen
 
 #### Random Forests
+* Initially performed worse than the linear regression model, but after tunning through grid search and cross validation was able to get MAE: 12.65 and r2 0.10
 
 ### Limitations
-* This project has been optimized for predicting flight delays taking place on the first week of January, and have trained models on data for that time frame (first week January plus 5 days around that time, as to not include Christmas).  Using this model to predict flights during the other times of the year will likely not perform as well.  
+* This project has been optimized for prediction of flight delays taking place in the first week of January, and has trained models on data for that time frame (first week January plus 5 days around that time, as to not include Christmas).  Using this model to predict flights during the other times of the year will likely not perform as well.  
 * Only two years of data were used, had we included additional years, we may have been able to increase the performance.
-* As we were only concerned with delayed flights, any flights that did not arrive were removed from the training set.  These models will not be able to predict cancelled flights.
+* As we were only concerned with delayed flights, any flights that did not arrive (cancelled/ diverted) were removed from the training set.  These models will not be able to predict cancelled flights.
 
 ### If we had more time, we would:
 * Use greater granularity in the grid searches for the various models as this would allow for more accurate predicting.
-* Add a feature to indicate if the airport origin for the flight is a hub for the particular airline for that flight.  This could indicate more resources to fix delays by more easily swapping aircraft is a precious one is late, or have the resources to repair minor mechanical issues in a more timely fashion.  
-* Add in weather historic weather data as it relates to flight delay.  We had pulled weather data for each day, but didn't pull for more frequent time segments. 
-* Investigate including popular flight routes.
-* Investigate aircraft type commonly used for those popular flight routes.
+* Add a feature to indicate if the airport origin for the flight is a hub for the particular airline for that flight.  This could indicate more resources to fix delays by more easily swapping aircraft if a previous one is late, or have the resources to repair minor mechanical issues in a more timely fashion.  
+* Add in weather historic weather data as it relates to flight delay.  We had pulled weather data for each day, but did not have a chance to pull for more frequent time segments. 
+* Investigate aircraft types commonly used for popular flight routes (are some are more affected by weather than others?.)
 * Investigate using more ensemble combinations.
-* It was interesting to see that number of passengers per airport were not directly correlated with the number of flights that airport sees in all cases.  Chicago and Newark for instance had higher passenger to flight ratio than other busyer airports and personal experience reveals a less pleasant experience in those airports.  If we had more time, we would include this information.
+* It was interesting to see that the number of passengers per airport were not directly correlated with the number of flights that airport sees in all cases.  Chicago and Newark for instance had higher passenger to flight ratio than other relatively busier airports and personal experience revealed a less pleasant experience in those airports.  If we had more time, we would include this information.
 
 ## Data Description
 
@@ -137,6 +141,3 @@ We can find the **all** information about specific attributes in this file.
 - **first_dep_time**: First Gate Departure Time at Origin Airport
 - **total_add_gtime**: Total Ground Time Away from Gate for Gate Return or Cancelled Flight
 - **longest_add_gtime**: Longest Time Away from Gate for Gate Return or Cancelled Flight
-
-
-
