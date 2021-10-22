@@ -135,7 +135,7 @@ We can find the **all** information about specific attributes in this file.
 ### Table **flights**
 ##### This is the available feature space for this project
 
-- of the ones we used?  ie _0 in all one hot encoding is the 
+
 ##### Variables from Flights.csv
 - **fl_date**: Flight Date (yyyy-mm-dd)
 - **mkt_unique_carrier**: Unique Marketing Carrier Code. When the same code has been used by multiple carriers, a numeric suffix is used for earlier users, for example, PA, PA(1), PA(2). Use this field for analysis across a range of years.
