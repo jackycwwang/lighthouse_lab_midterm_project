@@ -1,0 +1,12 @@
+/data
+/src/config.py
+/modules/config.py
+/src/flights_samp.csv
+/data/flights_samp.csv
+/src/__pychache__
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+.pycache
+**__pycache__
+.DS_Store?
+.DS_Store
