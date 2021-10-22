@@ -81,11 +81,8 @@ Since we are predicting arrival delays in minutes, a continuous variable, this i
 * It was interesting to see that the number of passengers per airport were not directly correlated with the number of flights that airport sees in all cases.  Chicago and Newark for instance had higher passenger to flight ratio than other relatively busier airports and personal experience revealed a less pleasant experience in those airports.  If we had more time, we would include this information.
 
 ## Data Description
-
-We can find the **all** information about specific attributes in this file.
-
-
-### Table **flights**
+ 
+##### This is the engineered feature space for training the model
 - **origin**: Origin Airport (top 20 one-hot encoded, remainder bucketed in to _0 encoded category)
 - **dest**: Destination Airport (top 20 one-hot encoded, remainder bucketed in to _0 encoded category)
 - **dep_hour**: Scheduled flight departure hour (minutes floored to hour) in local time - one-hot encoded
@@ -93,10 +90,22 @@ We can find the **all** information about specific attributes in this file.
 - **weekday**: Numeric day of week (M=0) - on-hot encoded
 - **origin_city**: Origin City (top 10 one-hot encoded, remainder bucketed in to _0 encoded category)
 - **dest_city**: Origin City (top 10 one-hot encoded, remainder bucketed in to _0 encoded category)
-
+- **fl_num_delay**: Average arrival delay to each route (consider only the flight frequency higher than 30, remainder replaced with median arr_delay)
+- **log_crs_elapsed_time**: Average log scheduled elapsed time binned to 20 categories and one-hot-encoded
+- **mkt_unique_carrier**: One-hot-encoded the carrier codes
+- **avg_carrier_delay**: Average Carrier Delay, in Minutes
+- **avg_weather_delay**: Average Weather Delay, in Minutes
+- **avg_nas_delay**: Aveerage National Air System Delay, in Minutes
+- **avg_security_delay**: Average Security Delay, in Minutes
+- **avg_late_aircraft_delay**: Average Late Aircraft Delay, in Minutes
+- **avg_dep_delay**: Average departure delay to airports, in Minutes
+- **origin_airport_fl_amt**: Frequency of origin flights per airport bucketed into 7 bins
+- **dest_airport_fl_amt**: Frequency of dest flights per airport bucketed into 7 bins
 
 #### Variables:
-##### Variables Used in Training Data
+We can find the **all** information about specific attributes in this file.
+### Table **flights**
+##### This is the available feature space for this project
 
 - of the ones we used?  ie _0 in all one hot encoding is the 
 ##### Variables from Flights.csv
@@ -141,3 +150,5 @@ We can find the **all** information about specific attributes in this file.
 - **first_dep_time**: First Gate Departure Time at Origin Airport
 - **total_add_gtime**: Total Ground Time Away from Gate for Gate Return or Cancelled Flight
 - **longest_add_gtime**: Longest Time Away from Gate for Gate Return or Cancelled Flight
+
+
