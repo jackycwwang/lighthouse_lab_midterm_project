@@ -178,4 +178,5 @@ We can find the **all** information about specific attributes in this file.
 - **total_add_gtime**: Total Ground Time Away from Gate for Gate Return or Cancelled Flight
 - **longest_add_gtime**: Longest Time Away from Gate for Gate Return or Cancelled Flight
 
-
+### Data
+Note: The required data set is not included in this repository due to the over-size of the file.
